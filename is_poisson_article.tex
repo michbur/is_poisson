@@ -86,7 +86,19 @@ The permutation goodness of fit test for Poisson distribution (further called PG
 \hat{\lambda} = - \ln \left(1 - \frac{k}{n} \right)
 \end{equation}
 
-According to the MIQUE Guidelines for Digital PCR, $k$ is number of positive partitions and $n$ is a total number of partitions. To perform the permutation test, we firstly compute $\hat\lambda$ for data vector. Next, the density of
+According to the MIQUE Guidelines for Digital PCR, $k$ is number of positive partitions and $n$ is a total number of partitions. To perform the permutation test, we firstly compute $\hat\lambda_R$ for data vector. Next, from the density of Poisson distribution we estimate the chance of having negative partition (no template molecules) or positive partition (more than zero template molecules). Obtained probabilities are used to perform a Chi Square test and the test statistic $\chi_R$ is preserved.
+
+Further, we use the $\hat\lambda_R$ to generate a large number of $n$-long sample from Poisson distribution. Each sample is binarized to positive and negative partitions and we perform the exactly the same procedure as for the real sample: we $\hat\lambda_P$, estimate probabilities of negative and positive partitions and finally perform the Chi Square test to obtain test statistic $\chi_P$.
+
+The p-value of permutation test is defined as:
+\begin{equation}   
+\textnormal{p-value} = \frac{N_{\chi_P > \chi_R}}{N}
+\end{equation}
+
+where $N_{\chi_P > \chi_R}$ is number of times when $\chi_P$ was more extreme than $\chi_R$.
+
+In case of very low $\hat\lambda_R$, sometimes the $\hat\lambda_P$ may be exactly zero. In this case we assume, that $\chi_P = 0$, that's how Chi test behaves ;)
+
 
 \section*{References}
 

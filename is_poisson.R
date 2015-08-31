@@ -2,14 +2,15 @@
 #' 
 #' Calculates coordinates of points on plot to represent a digital PCR array.
 #' 
-#' @param x A vector of counts, \code{\linkS4class{adpcr}}, \code{\linkS4class{ddpcr}} or
-#' \code{\linkS4class{qdpcr}} object.
+#' @param k number of positives.
+#' @param n total
+#' @param times number of repetitions
 #' @return An object of \code{is_poisson_c} class.
 #' @export
 #' @author Michal Burdukiewicz, Piotr Sobczyk, Stefan Roediger.
 #' @keywords htest
 is_poisson <- function(k, n, times = 10000) {
-  hat_lambda <- fl(k/n)
+  hat_lambda <- dpcR:::fl(k/n)
   
   chi <- chisq.test(table(factor(c(rep(1, k), rep(0, n - k)), levels = 0L:1)), 
                     p = dpois2dbinom(hat_lambda), rescale.p = TRUE,
@@ -19,12 +20,13 @@ is_poisson <- function(k, n, times = 10000) {
     y <- as.numeric(rpois(n, hat_lambda) > 0)
     
     if(length(unique(y)) < 2) {
-      Inf #sometimes lambda is low and y is all zeroes, in this case statistic should be Inf
+      0 #sometimes lambda is low and y is all zeroes, in this case statistic should be 0
     } else {
       chisq.test(table(factor(y, levels = 0L:1)), 
                  p = dpois2dbinom(fl(sum(y)/n)), rescale.p = TRUE, 
                  simulate.p.value = TRUE)[["statistic"]]
     }
+    
   })
   mean(chi_perm > chi)
 }
@@ -36,3 +38,6 @@ dpois2dbinom <- function(lambda) {
   dens[2L] <- sum(dens[2L:length(dens)])
   dens[1L:2]
 } 
+
+fl <- function(p)
+  -log(1 - p)
