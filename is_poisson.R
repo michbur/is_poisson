@@ -20,7 +20,7 @@ is_poisson <- function(k, n, times = 10000) {
     y <- as.numeric(rpois(n, hat_lambda) > 0)
     
     if(length(unique(y)) < 2) {
-      0 #sometimes lambda is low and y is all zeroes, in this case statistic should be 0
+      NA #sometimes lambda is low and y is all zeroes, in this case statistic should be 0
     } else {
       chisq.test(table(factor(y, levels = 0L:1)), 
                  p = dpois2dbinom(fl(sum(y)/n)), rescale.p = TRUE, 
@@ -28,7 +28,7 @@ is_poisson <- function(k, n, times = 10000) {
     }
     
   })
-  mean(chi_perm > chi)
+  mean(chi_perm > chi, na.rm = TRUE)
 }
 
 #calcuty late binomial density for poisson distrubution
