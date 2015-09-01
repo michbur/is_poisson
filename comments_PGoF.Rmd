@@ -1,0 +1,64 @@
+---
+title: "Comments on PGoF"
+author: "Piotr Sobczyk"
+date: "August 31, 2015"
+output: html_document
+---
+
+If we estimate $\lambda$ with
+
+$$
+\begin{equation}
+\hat{\lambda} = - \ln \left(1 - \frac{k}{n} \right)
+\end{equation}
+$$
+
+then from Poisson distribution we have probability of negative partition
+
+$$
+\begin{equation}
+\exp\{-\hat{\lambda}\} = \exp\{\ln \left(1 - \frac{k}{n} \right)\} = 1 - \frac{k}{n}
+\end{equation}
+$$
+
+So basically we have that we compute probability of nonzero elements with
+$\frac{\text{#positives}}{\text{# all}}$
+
+This is not the best estimator to use, especially if number of positives is small. We talked about it before.
+
+Then you compute value of $\chi^2$ statistic. Ok, you can always do that.
+
+In next step you generate samples according to $\hat\lambda$, and then you degenerate 
+those samples to binary. So basically you draw a sample for binomial distribution.
+Then you compute $\chi^2$ for those sample and compute p-value
+
+
+The p-value of permutation test is defined as:
+$$
+\begin{equation}   
+\text{p-value} = \frac{N_{\chi_P > \chi_R}}{N}
+\end{equation}
+$$
+
+However, you are not testing anything. In the beginning you have a sample that in fact 
+follows binomial distribution, then you resample it and check test stastics. In this process
+you ommited any information about data being drawn from Poisson distribution. So you are not 
+testing for being Poisson but being Binomial, which makes no sense. Binary data is in accordance
+to binomial with parameter $p$ estimated from this data.
+
+What you can do is to estimate $\hat\lambda$ differently. 
+
+#### Method 1
+
+You can compute mean - $\lambda$ and variance - $\lambda$
+and based on these estimators do resampling, compute chi-square statistic. 
+I don't know if such a test will be
+more powerful than the regular $\chi^2$ test. This has to be assesed in some simulation
+study. 
+
+#### Method 2
+
+There is another thing that pops into my head.
+When you estimate $\lambda$ with mean, it is a mean of all elements in sample. So it 
+approximately follows normal distribution. You can see if $\hat\lambda$ computed
+in different way is in 95\% confidence interval. If not you reject hypothesis.
