@@ -49,7 +49,15 @@
 \tnotetext[mytitlenote]{Fully documented templates are available in the elsarticle package on \href{http://www.ctan.org/tex-archive/macros/latex/contrib/elsarticle}{CTAN}.}
 
 %% Group authors per affiliation:
-\author{Elsevier\fnref{myfootnote}}
+\author{Micha\l{} Burdukiewicz}
+\address{Radarweg 29, Amsterdam}
+\fntext[myfootnote]{Since 1880.}
+
+\author{Piotr Sobczyk}
+\address{Radarweg 29, Amsterdam}
+\fntext[myfootnote]{Since 1880.}
+
+\author{Stefan R\"{o}diger}
 \address{Radarweg 29, Amsterdam}
 \fntext[myfootnote]{Since 1880.}
 
@@ -69,7 +77,7 @@ This template helps you to create a properly formatted \LaTeX\ manuscript.
 \end{abstract}
 
 \begin{keyword}
-\texttt{elsarticle.cls}\sep \LaTeX\sep Elsevier \sep template
+permutation dPCR Poisson
 \MSC[2010] 00-01\sep  99-00
 \end{keyword}
 
@@ -77,19 +85,45 @@ This template helps you to create a properly formatted \LaTeX\ manuscript.
 
 \linenumbers
 
+\section{Introduction}
+
+The amplification chemistry of absolute quantification in the Digital PCR (dPCR) 
+is orchestrated by well established methods such as PCR or isothermal 
+amplification \cite{pabinger_survey_2014, morley_digital_2014}. But dPCR relies 
+on binary state of positive and negative partitions from a sample. Data fitting 
+to a Poisson distribution is an essential step during analysis. The countable 
+positive independent integer values make the dPCR analysis interesting and the 
+Poisson distribution the obvious choice. The target molecule numbers initially 
+in a sample can be determined from the numbers of positive and negative 
+partitions by probability analysis.
+
+There exist other \textbf{R} packages for analyse and fit distributions \cite{fitdistrplus_2015}.
 
 \section{Methods}
-
-The permutation goodness of fit test for Poisson distribution (further called PGoF) is based on Chi Square test. The $\hat\lambda$ is calculated from counts of positive and negative partitions using following relationship:
+All functions were implemented in the \textbf{R} statistical computing 
+environment as described previously \cite{rodiger_r_2015}. The permutation 
+goodness of fit test for Poisson distribution (further called PGoF) is based on 
+Chi Square test. The $\hat\lambda$ is calculated from counts of positive and 
+negative partitions using following relationship:
 
 \begin{equation}
 \hat{\lambda} = - \ln \left(1 - \frac{k}{n} \right)
 \end{equation}
 
-According to the MIQUE Guidelines for Digital PCR, $k$ is number of positive partitions and $n$ is a total number of partitions. To perform the permutation test, we firstly compute $\hat\lambda_R$ for data vector. Next, from the density of Poisson distribution we estimate the chance of having negative partition (no template molecules) or positive partition (more than zero template molecules). Obtained probabilities are used to perform a Chi Square test and the test statistic $\chi_R$ is preserved.
+According to the MIQE Guidelines for Digital PCR \cite{huggett_digital_2013}, $k$ is number of positive 
+partitions and $n$ is a total number of partitions. To perform the permutation 
+test, we firstly compute $\hat\lambda_R$ for data vector. Next, from the density 
+of Poisson distribution we estimate the chance of having negative partition (no 
+template molecules) or positive partition (more than zero template molecules). 
+Obtained probabilities are used to perform a Chi Square test and the test 
+statistic $\chi_R$ is preserved.
 
-Further, we use the $\hat\lambda_R$ to generate a large number of $n$-long sample from Poisson distribution. Each sample is binarized to positive and negative partitions and we perform the exactly the same procedure as for the real sample: we $\hat\lambda_P$, estimate probabilities of negative and positive partitions and finally perform the Chi Square test to obtain test statistic $\chi_P$.
-
+Further, we use the $\hat\lambda_R$ to generate a large number of $n$-long 
+sample from Poisson distribution. Each sample is binarized to positive and 
+negative partitions and we perform the exactly the same procedure as for the 
+real sample: we $\hat\lambda_P$, estimate probabilities of negative and positive 
+partitions and finally perform the Chi Square test to obtain test statistic 
+$\chi_P$.
 The p-value of permutation test is defined as:
 \begin{equation}   
 \textnormal{p-value} = \frac{N_{\chi_P > \chi_R}}{N}
@@ -97,11 +131,11 @@ The p-value of permutation test is defined as:
 
 where $N_{\chi_P > \chi_R}$ is number of times when $\chi_P$ was more extreme than $\chi_R$.
 
-In case of very low $\hat\lambda_R$, sometimes the $\hat\lambda_P$ may be exactly zero. In this case the Chi square test has 0 degrees of freedom. 
-
+In case of very low $\hat\lambda_R$, sometimes the $\hat\lambda_P$ may be 
+exactly zero. In this case the Chi square test has 0 degrees of freedom. 
 
 \section*{References}
 
-\bibliography{mybibfile}
+\bibliography{dpcr}
 
 \end{document}
